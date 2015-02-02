@@ -7,7 +7,8 @@ from pyage_forams.solutions.environment import environment_factory, Environment3
 from pyage_forams.solutions.foram import create_forams, create_agent
 from pyage_forams.solutions.genom import GenomFactory
 from pyage_forams.solutions.insolation_meter import DynamicInsolation
-from pyage_forams.solutions.statistics import SimpleStatistics, PsiStatistics, CsvStatistics, MultipleStatistics
+from pyage_forams.solutions.statistics import SimpleStatistics, PsiStatistics, CsvStatistics, MultipleStatistics, \
+    ParaviewStatistics
 
 
 factory = GenomFactory(chambers_limit=5)
@@ -36,4 +37,10 @@ environment = environment_factory(regeneration_factor=0.1, clazz=Environment3d)
 stop_condition = lambda: StepLimitStopCondition(90)
 
 address_provider = address.SequenceAddressProvider
-stats = lambda: MultipleStatistics([CsvStatistics(), PsiStatistics()])
+
+stats_filename = 'results/forams'
+stats = lambda: MultipleStatistics([
+    CsvStatistics(filename='%s.csv' % stats_filename),
+    # PsiStatistics(filename=stats_filename),
+    ParaviewStatistics(filename=stats_filename)
+])
